@@ -1,4 +1,4 @@
-
+```sql
 
 
 CREATE TABLE general_data AS
@@ -61,7 +61,7 @@ WHERE publisher IS NOT NULL;
 SELECT * from publishers;
 
 
-
+```
 
 
 
