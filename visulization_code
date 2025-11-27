@@ -1,0 +1,58 @@
+--- Vega light code 
+
+
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Mac support vs No Mac support (iOS games)",
+  "width": 300,
+  "height": 300,
+  "data": {
+    "values": [
+      {"mac_support": "mac support ios", "percentage": 27.6},
+      {"mac_support": "no mac support ios", "percentage": 72.4}
+    ]
+  },
+
+  "encoding": {
+    "theta": {"field": "percentage", "type": "quantitative", "stack": true},
+    "color": {
+      "field": "mac_support",
+      "type": "nominal",
+      "legend": {"title": "Mac Support"}
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        
+        "outerRadius": 120
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 80,
+        "fontSize": 16,
+        "fontWeight": "bold",
+        "fill": "white"
+      },
+      "encoding": {
+        "theta": {
+          "field": "percentage",
+          "type": "quantitative",
+          "stack": true
+        },
+        "text": {
+          "field": "percentage",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    }
+  ],
+
+  "view": {"stroke": null},
+  "title": "Games with mac support (%)"
+}
