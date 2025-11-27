@@ -1,7 +1,7 @@
-```sql
 
 
-CREATE TABLE general_data AS
+DROP TABLE general_data;
+CREATE TABLE general_data_1 AS
 WITH raw AS (
     SELECT
         UNNEST(games) as general_data
@@ -9,7 +9,6 @@ WITH raw AS (
 )
 SELECT
     CAST(json_extract(general_data, '$.appid') AS INTEGER) as app_id,
-    json_extract_string(general_data, '$.name_from_applist') as name,
     CAST(json_extract(general_data, '$.app_details.data.steam_appid') AS INTEGER) as steam_appid,
     json_extract_string(general_data, '$.app_details.data.name') as game_name,
     json_extract_string(general_data, '$.app_details.data.type' ) AS game_type,
@@ -32,16 +31,33 @@ SELECT
     CAST(json_extract(general_data, '$.app_details.data.price_overview.final') AS DOUBLE) / 100 as price_final,
 
     json_extract(general_data, '$.app_details.data.publishers') AS publisher,
- json_extract_string(gen.value, '$.description') AS genre,
- pub.value::VARCHAR AS publisher
+    json_extract(general_data, '$.app_details.data.genres') AS genre
+
 
 FROM raw;
 
 
+SELECT * FROM general_data;
 
 
+CREATE TABLE general_data AS
+    SELECT *
+    FROM general_data_1
+WHERE
+    app_id IS NOT NULL
+    AND game_name IS NOT NULL
+    AND price_final IS NOT NULL
+    AND genre IS NOT NULL
+    AND publisher IS NOT NULL;
+
+SELECT * FROM general_data;
+
+
+
+
+drop table gen;
 CREATE TABLE gen AS
-SELECT app_id,
+SELECT game_name, price_final,
     json_extract_string(g.value, '$.description') AS genre
 FROM general_data,
 json_each(genre) AS g
@@ -59,14 +75,4 @@ WHERE publisher IS NOT NULL;
 
 
 SELECT * from publishers;
-
-
-```
-
-
-
-
-
-
-select * from general_data;
 
