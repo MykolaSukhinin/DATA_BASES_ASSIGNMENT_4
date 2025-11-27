@@ -1,0 +1,74 @@
+
+--- TABLE IN MOST RECENT RELEASES
+drop table most_recent;
+CREATE TABLE most_recent as
+    select game_name, data_ready
+from general_data
+where data_ready is not null and game_name is not null
+
+order by data_ready desc
+limit 10;
+select * from most_recent;
+
+
+
+
+
+
+
+
+---- TABLE WITH BEST PUBLISHERS WITH THE MOST PUBLISHES
+DROP TABLE best_publishers;
+create table best_publishers as
+    select publisher, COUNT(DISTINCT app_id) AS total_games
+from publishers
+group by publisher
+order by total_games desc
+limit 20;
+
+select * from best_publishers;
+
+
+
+
+
+--- TABLE AVG PRICE OF THE GAME WHICH IS 16+
+DROP TABLE avg_price_above_16;
+create table avg_price_above_16 as
+    select  ROUND(AVG(price_final), 2) AS avg_price_16_plus
+    from general_data
+    where age_reg >= 16
+      and price_final is not null;
+
+select * from avg_price_above_16;
+
+
+
+--- TABLE ON MAX PRICE OF THE GAMES WITH THE ACTION GENRE
+create table max_price_action as
+    select max(price_final) as max_price
+    FROM gen
+        where genre = 'Action' AND price_final IS NOT NULL;
+
+SELECT * FROM max_price_action;
+
+
+
+----mac user games
+CREATE TABLE MAC_users AS
+SELECT
+    CASE WHEN mac = TRUE THEN 'supports mac ios'
+        else 'no mac support ios'
+    END AS mac_support,
+    ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2) AS percentage
+FROM general_data
+GROUP BY mac_support;
+
+select * from MAC_users;
+
+
+
+
+
+
+
